@@ -3,14 +3,18 @@ $(function () {
     var getTemplate1 = function () {
         return _.template($("#tl_insert_tr").text());
     };
-
+    var getTemplateLoding = function () {
+        return _.template($("#tl_insert_loading").text());
+    };
+    
     function DemoClass() {
         var self = this instanceof DemoClass ? this : Object.create(DemoClass.prototype);
     };
 
     //prototypeを使用することで、js読み込み時にtemplateをキャッシュ化する。
     DemoClass.prototype = {
-        template1: getTemplate1()
+        template1: getTemplate1(),
+        template_loding : getTemplateLoding()
     };
 
     /*
@@ -100,7 +104,11 @@ $(function () {
     function ajax1() {
 
         var deferred = $.Deferred()
+        
+        var demoClass = new DemoClass();        
 
+        $("#insert-tr").after(demoClass.template_loding());
+        
         $.ajax({
             type: 'POST',
             url: '_ajax.php',
@@ -113,7 +121,7 @@ $(function () {
             $('#append_area').append("text:" + data.text + "color:" + data.color + "background:" + data.background);
 
             //キャッシュ化されたテンプレートを取得する。
-            var demoClass = new DemoClass();
+            $("#id-loding").hide();
             $("#insert-tr").after(demoClass.template1(data));
 
             deferred.resolve('success');
@@ -123,6 +131,7 @@ $(function () {
             deferred.reject();
         }).always(function () {
             console.log('ajax1 always');
+            
         });
 
         return deferred.promise();
@@ -134,6 +143,10 @@ $(function () {
 
         var deferred = $.Deferred()
 
+        var demoClass = new DemoClass();        
+
+//        $("#insert-tr").after(demoClass.template_loding());
+        
         $.ajax({
             type: 'POST',
             url: '_ajax2.php',
@@ -146,7 +159,7 @@ $(function () {
             $('#append_area').append("text:" + data.text + "color:" + data.color + "background:" + data.background);
 
             //キャッシュ化されたテンプレートを取得する。
-            var demoClass = new DemoClass();
+//            $("#id-loding").hide();
             $("#insert-tr").after(demoClass.template1(data));
 
             deferred.resolve('success');
@@ -167,6 +180,10 @@ $(function () {
 
         var deferred = $.Deferred()
 
+        var demoClass = new DemoClass();        
+
+//        $("#insert-tr").after(demoClass.template_loding());
+        
         $.ajax({
             type: 'POST',
             url: '_ajax3.php',
@@ -180,6 +197,7 @@ $(function () {
 
             //キャッシュ化されたテンプレートを取得する。
             var demoClass = new DemoClass();
+//            $("#id-loding").hide();
             $("#insert-tr").after(demoClass.template1(data));
 
             deferred.resolve('success');

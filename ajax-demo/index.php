@@ -78,5 +78,9 @@
         <%= background %>
     </div>
 </script>
-
+<script type="text/template" id="tl_insert_loading">
+    <div class="col-md-12" id="id-loding">
+        <img src="img/loading-37.gif">
+    </div>
+</script>
 </html>
