@@ -67,19 +67,33 @@ $(function () {
             console.log("all finish done");
         });
         */
-        /*
+        
         $.when(ajax1(), 
-               ajax2()
-        ).always(function () {
+               ajax2(),
+               ajax3()
+        ).done(function (v1,v2,v3) {
             console.log("all finish always");
+            console.log("v1:"+ v1 + ",v2:" + v2 + ",v3:" + v3);
+            
+            if("success" === v1) {
+                console.log("v1 equal done");   
+            }
+            if("success"===v2) {
+                console.log("v2 equal done");   
+            }
+            if("success"===v3) {
+                console.log("v3 equal done");   
+            }
         });
-        */
+        
+        /*
         //ajax1を実行し終わった後に、ajax2,ajax3を並列送信
         ajax1().then(function() {
             return $.when(ajax2(),ajax3());   
         }).always(function() {
             console.log("all finish always"); 
         });
+        */
         
     });
 

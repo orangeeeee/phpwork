@@ -4,7 +4,7 @@ header("Content-type: text/json; charset=UTF-8");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     //deferred test用のsleep
-    sleep(5);
+    sleep(1);
     
     //ここに何かしらの処理を書く（DB登録やファイルへの書き込みなど）
     //echo "OK";
