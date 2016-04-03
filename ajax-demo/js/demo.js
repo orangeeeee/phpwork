@@ -29,16 +29,64 @@ $(function () {
     */
 
     $("#input-bt1").click(function () {
+
+        console.log("before ajax1");
+
+        //これだと通信も順番通りになる。
+        /*
         ajax1().done(function() {
             
+            console.log("before ajax2");
+            
             ajax2();
+            
+            console.log("after ajax2");
+            
         });
+        */
+        /* これも同じ 直列*/
+        /*
+            ajax1().then(function () {
+                console.log("before ajax2");
+                return ajax2();
+            }).then(function () {
+                console.log("before ajax3");
+                return ajax3();
+            }).done(function() {
+                console.log("all finish done");
+            });
+        
+        */
+
+        //並列実行：両方送信後に結果を受け取る場合
+        /*
+        //ajax1,ajax2が並列送信、両方完了後にalwaysが実行される。
+        $.when(ajax1(), 
+               ajax2()
+        ).always(function () {
+            console.log("all finish done");
+        });
+        */
+        /*
+        $.when(ajax1(), 
+               ajax2()
+        ).always(function () {
+            console.log("all finish always");
+        });
+        */
+        //ajax1を実行し終わった後に、ajax2,ajax3を並列送信
+        ajax1().then(function() {
+            return $.when(ajax2(),ajax3());   
+        }).always(function() {
+            console.log("all finish always"); 
+        });
+        
     });
 
     function ajax1() {
-        
-//        var deferred = new $Deferred();
+
         var deferred = $.Deferred()
+
         $.ajax({
             type: 'POST',
             url: '_ajax.php',
@@ -46,7 +94,7 @@ $(function () {
                 'test_text': 'ajax関数側で追加したテキスト'
             }
         }).done(function (data) {
-            console.log('done');
+            console.log('ajax1 done');
             console.log(data);
             $('#append_area').append("text:" + data.text + "color:" + data.color + "background:" + data.background);
 
@@ -54,20 +102,24 @@ $(function () {
             var demoClass = new DemoClass();
             $("#insert-tr").after(demoClass.template1(data));
 
-            deferred.resolve('success')
+            deferred.resolve('success');
+
         }).fail(function () {
             console.log('fail');
+            deferred.reject();
         }).always(function () {
-            console.log('ajax finish');
+            console.log('ajax1 always');
         });
-        
+
         return deferred.promise();
 
     }
 
-    
+
     function ajax2() {
-        
+
+        var deferred = $.Deferred()
+
         $.ajax({
             type: 'POST',
             url: '_ajax2.php',
@@ -75,7 +127,7 @@ $(function () {
                 'test_text': 'ajax関数側で追加したテキスト'
             }
         }).done(function (data) {
-            console.log('done');
+            console.log('ajax2 done');
             console.log(data);
             $('#append_area').append("text:" + data.text + "color:" + data.color + "background:" + data.background);
 
@@ -83,11 +135,50 @@ $(function () {
             var demoClass = new DemoClass();
             $("#insert-tr").after(demoClass.template1(data));
 
+            deferred.resolve('success');
+
         }).fail(function () {
             console.log('fail');
+            deferred.reject();
         }).always(function () {
-            console.log('ajax finish');
+            console.log('ajax2 always');
         });
+
+
+        return deferred.promise();
+
+    }
+
+    function ajax3() {
+
+        var deferred = $.Deferred()
+
+        $.ajax({
+            type: 'POST',
+            url: '_ajax3.php',
+            data: {
+                'test_text': 'ajax関数側で追加したテキスト'
+            }
+        }).done(function (data) {
+            console.log('ajax3 done');
+            console.log(data);
+            $('#append_area').append("text:" + data.text + "color:" + data.color + "background:" + data.background);
+
+            //キャッシュ化されたテンプレートを取得する。
+            var demoClass = new DemoClass();
+            $("#insert-tr").after(demoClass.template1(data));
+
+            deferred.resolve('success');
+
+        }).fail(function () {
+            console.log('fail');
+            deferred.reject();
+        }).always(function () {
+            console.log('ajax3 always');
+        });
+
+
+        return deferred.promise();
 
     }
 
