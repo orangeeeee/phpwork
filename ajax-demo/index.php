@@ -51,7 +51,7 @@
 
     <form action="" method="post" enctype="multipart/form-data">
         <br>
-        <input type="button" id="input-bt1" value="demo-btn1">
+        <input type="button" id="input-bt1" class="btn btn-primary" value="demo-btn1">
         <br>
         <br>
         <div class="container">
